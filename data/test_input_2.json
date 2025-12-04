@@ -1,0 +1,12 @@
+{
+    "restaurants": [
+      {"restaurant_id": 2, "name": "کباب‌سرای سنتی عمو حسن", "category": "Traditional", "location": "تجریش", "avg_delivery_time": 45, "rating": 4.6, "price_range": "$$$"}
+    ],
+    "reviews": [
+      {"review_id": 2001, "restaurant_id": 2, "user_rating": 5, "comment_text": "کباب کوبیده حرف نداشت", "created_at": "2024-11-20T20:30:00"},
+      {"review_id": 2002, "restaurant_id": 2, "user_rating": 5, "comment_text": "جوجه با استخوان عالی بود", "created_at": "2024-11-21T19:45:00"},
+      {"review_id": 2003, "restaurant_id": 2, "user_rating": 2, "comment_text": "غذا سرد و برنج خشک", "created_at": "2024-11-22T21:20:00"},
+      {"review_id": 2004, "restaurant_id": 2, "user_rating": 5, "comment_text": "بهترین چلوکباب تهران", "created_at": "2024-11-23T20:00:00"},
+      {"review_id": 2005, "restaurant_id": 2, "user_rating": 4, "comment_text": "کیفیت خوب، کمی دیر رسید", "created_at": "2024-11-24T19:30:00"}
+    ]
+}
