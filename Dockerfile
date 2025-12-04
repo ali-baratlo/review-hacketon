@@ -1,19 +1,21 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# 1. Base image با PyTorch CPU آماده
+FROM pytorch/pytorch:2.2.0-cpu
 
-# Set the working directory in the container
+# 2. Set working directory
 WORKDIR /app
 
-# Copy the requirements file into the container at /app
+# 3. سیستم نیازمندی‌ها برای hazm
+RUN apt-get update && apt-get install -y build-essential python3-dev && rm -rf /var/lib/apt/lists/*
+
+# 4. Copy requirements
 COPY requirements.txt .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir hazm --no-dependencies
+# 5. Upgrade pip و نصب dependencies
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application's code into the container at /app
+# 6. Copy app
 COPY . .
 
-# Run main.py when the container launches
+# 7. Run main
 CMD ["python", "main.py"]
