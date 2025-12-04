@@ -1,7 +1,7 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
+# 1. Base image با PyTorch CPU آماده
+FROM pytorch/pytorch:2.2.0-cpu
 
-# Set the working directory in the container
+# 2. Set working directory
 WORKDIR /app
 
 # Copy the requirements file into the container at /app
@@ -19,5 +19,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # This layer will only be re-built if the application's code changes.
 COPY . .
 
-# Run main.py when the container launches
+# 7. Run main
 CMD ["python", "main.py"]

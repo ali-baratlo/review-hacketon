@@ -1,14 +1,9 @@
-# hazm is installed separately with --no-dependencies to avoid a numpy version conflict.
-# The dependencies for hazm are listed below.
 hazm
 fasttext-wheel
 flashtext
 gensim
 python-crfsuite
-
-# The rest of the project dependencies are listed below.
 transformers
-torch
 scikit-learn
 pandas
 nltk
