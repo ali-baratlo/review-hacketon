@@ -1,17 +1,14 @@
 import json
 import pandas as pd
 from hazm import Normalizer, word_tokenize
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import arabic_reshaper
 from bidi.algorithm import get_display
 import re
+import argparse
 
 # ----------------- Configuration -----------------
-
-# File paths
-INPUT_FILE = 'data/restaurants.json'
-OUTPUT_FILE = 'data/output.json'
 
 # Models
 SENTIMENT_MODEL = "HooshvareLab/bert-fa-base-uncased-sentiment-deepsentipers-binary"
@@ -225,45 +222,34 @@ def generate_ai_summary(themes, alerts, trends, summarization_pipeline):
 
 # ----------------- Main Execution -----------------
 
-def main():
+def main(input_file, output_file):
     """Main function to run the AI pipeline."""
-    print("Starting AI pipeline...")
-    data = load_data(INPUT_FILE)
-    print("Data loaded successfully.")
+    data = load_data(input_file)
     restaurants = data['restaurants']
     reviews = pd.DataFrame(data['reviews'])
 
-    print("Initializing sentiment analysis pipeline...")
     sentiment_pipeline = pipeline("sentiment-analysis", model=SENTIMENT_MODEL)
-    print("Sentiment analysis pipeline initialized.")
 
-    print("Initializing summarization pipeline...")
-    summarization_pipeline = pipeline("question-answering", model=SUMMARIZATION_MODEL)
-    print("Summarization pipeline initialized.")
+    summarization_tokenizer = AutoTokenizer.from_pretrained(SUMMARIZATION_MODEL)
+    summarization_pipeline = pipeline("question-answering", model=SUMMARIZATION_MODEL, tokenizer=summarization_tokenizer)
 
     all_results = []
 
     for restaurant in restaurants:
-        print(f"Processing restaurant: {restaurant['name']}")
         restaurant_id = restaurant['restaurant_id']
         restaurant_reviews = reviews[reviews['restaurant_id'] == restaurant_id].copy()
 
         if restaurant_reviews.empty:
-            print(f"No reviews for {restaurant['name']}. Skipping.")
             continue
 
         # 1. Preprocess text
-        print("Preprocessing text...")
         restaurant_reviews['processed_text'] = restaurant_reviews['comment_text'].apply(preprocess_text)
 
         # 2. Sentiment Analysis
-        print("Analyzing sentiment...")
         processed_reviews = restaurant_reviews['processed_text'].tolist()
         restaurant_reviews['sentiment'] = analyze_sentiment(processed_reviews, sentiment_pipeline)
-        print("Sentiment analysis complete.")
 
         # 3. Sentiment Summary
-        print("Summarizing sentiment...")
         sentiment_counts = restaurant_reviews['sentiment'].value_counts()
         total_reviews = len(restaurant_reviews)
         sentiment_summary = {
@@ -292,17 +278,12 @@ def main():
         word_cloud_data = generate_wordcloud_data(processed_reviews)
 
         # 9. Health Score
-        print("Calculating health score...")
         health_score = calculate_health_score(sentiment_summary, restaurant['rating'], aspect_scores)
-        print("Health score calculated.")
 
         # 10. AI Summary
-        print("Generating AI summary...")
         ai_summary = generate_ai_summary(top_themes, alerts, time_trends, summarization_pipeline)
-        print("AI summary generated.")
 
         # --- Final Output ---
-        print("Generating final output...")
         result = {
             "restaurant_id": restaurant_id,
             "restaurant_name": restaurant['name'],
@@ -318,10 +299,14 @@ def main():
         all_results.append(result)
 
     # Save results to output file
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(all_results, f, ensure_ascii=False, indent=4)
 
-    print(f"Analysis complete. Results saved to {OUTPUT_FILE}")
+    print(f"Analysis complete. Results saved to {output_file}")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Persian Restaurant Review Analysis AI Pipeline")
+    parser.add_argument("--input-file", type=str, default="data/restaurants.json", help="Path to the input JSON file.")
+    parser.add_argument("--output-file", type=str, default="data/output.json", help="Path to the output JSON file.")
+    args = parser.parse_args()
+    main(args.input_file, args.output_file)

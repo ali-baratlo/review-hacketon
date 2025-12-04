@@ -1,0 +1,12 @@
+{
+    "restaurants": [
+      {"restaurant_id": 1, "name": "پیتزا شب تهران شعبه ونک", "category": "Pizza", "location": "ونک", "avg_delivery_time": 38, "rating": 4.3, "price_range": "$$"}
+    ],
+    "reviews": [
+      {"review_id": 1001, "restaurant_id": 1, "user_rating": 5, "comment_text": "بهترین پیتزای تهران، پنیر کش‌دار و خمیر عالی", "created_at": "2024-11-20T20:15:00"},
+      {"review_id": 1002, "restaurant_id": 1, "user_rating": 2, "comment_text": "پیتزا سوخته و سس خیلی ترش بود", "created_at": "2024-11-21T21:30:00"},
+      {"review_id": 1003, "restaurant_id": 1, "user_rating": 5, "comment_text": "پیک سریع و مودب، غذا داغ رسید", "created_at": "2024-11-22T19:45:00"},
+      {"review_id": 1004, "restaurant_id": 1, "user_rating": 1, "comment_text": "۹۰ دقیقه تاخیر داشت، غذا یخ زده بود", "created_at": "2024-11-23T22:10:00"},
+      {"review_id": 1005, "restaurant_id": 1, "user_rating": 4, "comment_text": "طعم عالی فقط کمی شور", "created_at": "2024-11-24T20:00:00"}
+    ]
+}
